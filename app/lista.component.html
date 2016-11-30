@@ -1,0 +1,42 @@
+
+<div *ngIf="lista" class="panel panel-info">
+  <div class="panel-heading">{{lista.nomeLista}}</div>
+  <div class="panel-body">
+
+    <input type='text' [(ngModel)]="novoItem" placeholder="Novo Item" (keyup.enter)="adicionar()"/>
+    <button (click)="adicionar()">Adicionar</button>
+
+    <h3>Ainda resta comprar...</h3>
+    <ul  class="list-group mostraApenasTodo">
+      <li *ngFor="let item of lista.itens"
+          class="list-group-item"
+          [class.disabled]="item.status==='done'"
+          [class.feito]="item.status==='done'"
+          (click)="mudarStatus(item)">
+          {{item.nome}}
+      </li>
+    </ul>
+
+    <h3>
+      Já foi...
+      <button class="btn btn-default pull-right"
+          (click)="removerConcluidos()">
+          Limpar Todos
+      </button>
+    </h3>
+    <ul class="list-group mostraApenasDone">
+      <li *ngFor="let item of lista.itens"
+          class="list-group-item"
+          [class.disabled]="item.status==='done'"
+          [class.feito]="item.status==='done'"
+          (click)="mudarStatus(item)">
+          {{item.nome}}
+          <button class="btn btn-default btn-xs pull-right"
+              (click)="remover(item)">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+      </li>
+    </ul>
+
+  </div>
+</div>
