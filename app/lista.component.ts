@@ -24,41 +24,44 @@ export class ListaComponent {
     }else{
       item.status = 'done';
     }
+    this.listaService.mudaStatus(item, this.lista);
   }
 
   remover( item : Item ): void{
+    /*
     let index = this.lista.itens.indexOf(item);
     this.lista.itens.splice(index,1);
+    */
+    this.listaService.removeItemDaLista(item,this.lista);
   }
 
   removerConcluidos():void{
+    /*
     let concluidos = this.lista.itens.filter(function(item){return item.status==='done'});
     concluidos.forEach(item => this.remover(item));
+    */
+
+    let concluidos = this.lista.itens.filter(function(item){return item.status==='done'});
+    concluidos.forEach((item) => {
+        this.listaService.removeItemDaLista(item,this.lista);
+    });
+
+
+
   }
 
   adicionar(): void {
     if( this.novoItem === "" )
       return;
 
-    let auxitem : Item = {
+    let novoObjeto : Item = {
       nome : this.novoItem,
       status : 'todo',
       dtCriacao : new Date()
     };
 
+    this.listaService.adicionaItemNaLista(novoObjeto,this.lista);
+
     this.novoItem = "";
-/*
-    this.listaService.getLista( this.lista.objectId )
-    .then( (listaSelecionada) => {
-      listaSelecionada.itens.add("itens",auxitem);
-      listaSelecionada.save(
-        {success: function(listaSalva){
-
-          console.log("Novo Item Salvo: %o", listaSalva);
-        }});
-      }
-
-    //this.lista.itens.push(auxitem);
-  );*/
   }
 }

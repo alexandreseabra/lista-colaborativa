@@ -15,8 +15,8 @@ export class AppComponent {
   listaSelecionada: Lista=null;
 
   listaSelecionadaAtualizada(lista: Lista) : void{
-    console.log("LISTA SELECIONADA %o", lista);
-    console.log("LISTA SELECIONADA"+JSON.stringify(lista));
+    //console.log("LISTA SELECIONADA %o", lista);
+    //console.log("LISTA SELECIONADA"+JSON.stringify(lista));
     this.listaSelecionada = lista;
   }
 
