@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 
 import { Lista }                  from './model/lista';
 
+//Apenas para evitar msg de erro de module.id
+declare var module: any;
+
 @Component({
+    moduleId: module.id,
     selector: 'my-app',
-    template: `
-    <listas (listaSelecionadaEvento)="listaSelecionadaAtualizada($event)">
-    </listas>
-    <lista [lista]="listaSelecionada"></lista>
-    <parse></parse>`
+    templateUrl: 'app.component.html'
 })
 export class AppComponent {
 

@@ -6,7 +6,7 @@ import { Lista }                     from './model/lista';
 import { UtilService }               from './util.service';
 import { ListaService }           from './service/lista.service'
 
-declare var Parse: any;
+
 
 @Component({
   selector: 'listas',
@@ -19,8 +19,10 @@ declare var Parse: any;
           <li *ngFor="let lista of listas"
               class="list-group-item"
               (click)="selecionaLista(lista)"
-              [class.active]="listas[indexListaSelecionada]===lista">
+              [class.active]="listas[indexListaSelecionada]===lista"
+              [routerLink]="['/lista', lista.objectId]">
             {{lista.objectId}} - {{lista.nomeLista}} - criado por {{lista.criadoPor}}
+
           </li>
         </ul>
 
@@ -35,7 +37,6 @@ export class ListasComponent implements OnInit{
   listaSelecionadaEvento = new EventEmitter();
   private listas : Lista[];
   private indexListaSelecionada : number=0;
-  private subscription: any;
   private auxListasComponent: ListasComponent; //
 
   constructor(private listaService: ListaService,
@@ -53,7 +54,7 @@ export class ListasComponent implements OnInit{
         this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
       }
     });
-
+/*
     let Lista = Parse.Object.extend("Lista");
     let query = new Parse.Query(Lista);
     this.subscription = query.subscribe();
@@ -66,15 +67,17 @@ export class ListasComponent implements OnInit{
     });
 
 
-    this.subscription.on('create', (listaEvento:any) => {
-      //TODO FUTURAMENTE VAMOS RETIRAR ESSSE CODIGO REPLICADO!
-      this.listaService.getListas().then( (listas:any)=> {
-        this.listas = JSON.parse(JSON.stringify(listas,null,4));
-        this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
-      });
-    });
 
-    this.subscription.on('update', (listaEvento:any) => {
+
+  this.subscription.on('update', (listaEvento:any) => {
+    //TODO FUTURAMENTE VAMOS RETIRAR ESSSE CODIGO REPLICADO!
+    this.listaService.getListas().then( (listas:any)=> {
+      this.listas = JSON.parse(JSON.stringify(listas,null,4));
+      this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
+    });
+  });
+
+    this.subscription.on('create', (listaEvento:any) => {
       //TODO FUTURAMENTE VAMOS RETIRAR ESSSE CODIGO REPLICADO!
       this.listaService.getListas().then( (listas:any)=> {
         this.listas = JSON.parse(JSON.stringify(listas,null,4));
@@ -105,13 +108,14 @@ export class ListasComponent implements OnInit{
         this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
       });
     });
-
+*/
   }
 
-  selecionaLista(lista: Lista): void{
+  selecionaLista(lista: Lista): void {
     this.indexListaSelecionada= this.listas.indexOf(lista);
-    this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
+    //this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
   }
+
 }
 
 /*

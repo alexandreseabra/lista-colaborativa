@@ -1,12 +1,23 @@
 
-<div *ngIf="lista" class="panel panel-info">
-  <div class="panel-heading">{{lista.nomeLista}}</div>
-  <div class="panel-body">
 
-    <input type='text' [(ngModel)]="novoItem" placeholder="Novo Item" (keyup.enter)="adicionar()"/>
-    <button (click)="adicionar()">Adicionar</button>
+<div *ngIf="lista" >
 
-    <h3>Ainda resta comprar...</h3>
+    <div class="input-group">
+      <input type="text"
+            class="form-control"
+            placeholder="Novo Item..."
+            [(ngModel)]="novoItem"
+            (keyup.enter)="adicionar()">
+      <span class="input-group-btn">
+        <button class="btn btn-default"
+                type="button"
+                (click)="adicionar()">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+      </span>
+    </div><!-- /input-group -->
+
+
     <ul  class="list-group mostraApenasTodo">
       <li *ngFor="let item of lista.itens"
           class="list-group-item"
@@ -16,14 +27,12 @@
           {{item.nome}}
       </li>
     </ul>
+    <h4>
+      <span *ngIf="listaCompleta()">
+        Yeah! Acabou!
+      </span>
+    </h4>
 
-    <h3>
-      Já foi...
-      <button class="btn btn-default pull-right"
-          (click)="removerConcluidos()">
-          Limpar Todos
-      </button>
-    </h3>
     <ul class="list-group mostraApenasDone">
       <li *ngFor="let item of lista.itens"
           class="list-group-item"
@@ -38,5 +47,9 @@
       </li>
     </ul>
 
-  </div>
+    <button class="btn btn-danger btn-block"
+        (click)="removerConcluidos()">
+        Apagar Prontos <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+    </button>
+
 </div>
