@@ -1,0 +1,31 @@
+
+<div>
+
+  <div class="well">
+    <div class="input-group">
+      <input type="text"
+            class="form-control"
+            placeholder="Nome nova lista..."
+            [(ngModel)]="nomeNovaLista">
+      <span class="input-group-btn">
+        <button class="btn btn-default"
+                type="button" (click)="adicionarNovaLista()">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+      </span>
+    </div>
+  </div>
+
+
+  <ul *ngIf="listas" class="list-group">
+    <li *ngFor="let lista of listas"
+        class="list-group-item clearfix"
+        [routerLink]="['/lista', lista.objectId]">
+      {{lista.objectId}} - {{lista.nomeLista}}
+      <button class="btn btn-danger pull-right" (click)="removeLista(lista, $event)">
+          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+      </button>
+    </li>
+  </ul>
+
+</div>

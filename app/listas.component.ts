@@ -6,38 +6,18 @@ import { Lista }                     from './model/lista';
 import { UtilService }               from './util.service';
 import { ListaService }           from './service/lista.service'
 
-
+//Apenas para evitar msg de erro de module.id
+declare var module: any;
 
 @Component({
+  moduleId: module.id,
   selector: 'listas',
-  template: `
-    <div class="panel panel-primary">
-      <div class="panel-heading">Todas as listas</div>
-      <div class="panel-body">
-
-        <ul *ngIf="listas" class="list-group">
-          <li *ngFor="let lista of listas"
-              class="list-group-item"
-              (click)="selecionaLista(lista)"
-              [class.active]="listas[indexListaSelecionada]===lista"
-              [routerLink]="['/lista', lista.objectId]">
-            {{lista.objectId}} - {{lista.nomeLista}} - criado por {{lista.criadoPor}}
-
-          </li>
-        </ul>
-
-      </div>
-    </div>
-
-  `
+  templateUrl: 'listas.component.html'
 })
 export class ListasComponent implements OnInit{
 
-  @Output()
-  listaSelecionadaEvento = new EventEmitter();
   private listas : Lista[];
-  private indexListaSelecionada : number=0;
-  private auxListasComponent: ListasComponent; //
+  private nomeNovaLista : string;
 
   constructor(private listaService: ListaService,
                 private utilService:UtilService,
@@ -49,74 +29,29 @@ export class ListasComponent implements OnInit{
       console.log("PARSE OBJECT %o",listas);
 
       this.listas = JSON.parse(JSON.stringify(listas,null,4));
-
-      if( this.listas && this.listas.length > 0 ){
-        this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
-      }
     });
-/*
-    let Lista = Parse.Object.extend("Lista");
-    let query = new Parse.Query(Lista);
-    this.subscription = query.subscribe();
-
-    this.subscription.on('open', () => {
-     console.log('subscription opened');
-    });
-    this.subscription.on('close', () => {
-      console.log('subscription closed');
-    });
-
-
-
-
-  this.subscription.on('update', (listaEvento:any) => {
-    //TODO FUTURAMENTE VAMOS RETIRAR ESSSE CODIGO REPLICADO!
-    this.listaService.getListas().then( (listas:any)=> {
-      this.listas = JSON.parse(JSON.stringify(listas,null,4));
-      this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
-    });
-  });
-
-    this.subscription.on('create', (listaEvento:any) => {
-      //TODO FUTURAMENTE VAMOS RETIRAR ESSSE CODIGO REPLICADO!
-      this.listaService.getListas().then( (listas:any)=> {
-        this.listas = JSON.parse(JSON.stringify(listas,null,4));
-        this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
-      });
-    });
-
-    this.subscription.on('enter', (listaEvento:any) => {
-      //TODO FUTURAMENTE VAMOS RETIRAR ESSSE CODIGO REPLICADO!
-      this.listaService.getListas().then( (listas:any)=> {
-        this.listas = JSON.parse(JSON.stringify(listas,null,4));
-        this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
-      });
-    });
-
-    this.subscription.on('delete', (listaEvento:any) => {
-      //TODO FUTURAMENTE VAMOS RETIRAR ESSSE CODIGO REPLICADO!
-      this.listaService.getListas().then( (listas:any)=> {
-        this.listas = JSON.parse(JSON.stringify(listas,null,4));
-        this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
-      });
-    });
-
-    this.subscription.on('leave', (listaEvento:any) => {
-      //TODO FUTURAMENTE VAMOS RETIRAR ESSSE CODIGO REPLICADO!
-      this.listaService.getListas().then( (listas:any)=> {
-        this.listas = JSON.parse(JSON.stringify(listas,null,4));
-        this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
-      });
-    });
-*/
   }
 
-  selecionaLista(lista: Lista): void {
-    this.indexListaSelecionada= this.listas.indexOf(lista);
-    //this.listaSelecionadaEvento.emit( this.listas[this.indexListaSelecionada] );
+  removeLista(lista: Lista, event: any): void {
+    event.stopPropagation();
+    let index = this.listas.indexOf(lista);
+    console.log(index);
+    this.listas.splice(index,1);
+
+    this.listaService.removeLista(lista.objectId);
+  }
+
+  adicionarNovaLista():void {
+    console.log(this.nomeNovaLista);
+    this.listaService.adicionaLista(this.nomeNovaLista).then(
+      (lista:Lista) => {
+        this.listas.push( JSON.parse(JSON.stringify(lista,null,4)) );
+      }
+    );
   }
 
 }
+
 
 /*
 

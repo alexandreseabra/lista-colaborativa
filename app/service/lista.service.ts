@@ -1,4 +1,3 @@
-
 //// <reference path="../../node_modules/typescript/lib/lib.es6.d.ts" />
 
 import { Injectable } from '@angular/core';
@@ -25,6 +24,57 @@ export class ListaService{
     let Lista = Parse.Object.extend("Lista");
     let query = new Parse.Query(Lista);
     return query.get(objectId);
+  }
+
+  removeLista(objectId:string): void{
+    console.log("DELETANDO LISTA NO SERVIDOR "+ objectId);
+    let ListaParse = Parse.Object.extend("Lista");
+    let query = new Parse.Query(ListaParse);
+
+    query.get(objectId,{
+        success: function(lista:any) {
+          console.log("LISTA ENCNTRADA "+JSON.stringify(lista));
+          lista.destroy({
+            success: function(myObject:any) {
+              console.log("ITEM DELETADO "+myObject);
+            },
+            error: function(myObject: any, error:any) {
+              console.log(error);
+            }
+          });
+        },
+      error: function(myObject: any, error:any) {
+        console.log(error);
+      }
+    });
+
+    /*query.get(objectId, {
+      success: function(listaASerDeletada:any) {
+        console.log("ITEM A SER DELETADO RECUPERADO"+listaASerDeletada);
+        listaASerDeletada.destroy({
+          success: function(myObject:any) {
+            console.log("ITEM DELETADO "+myObject);
+          },
+          error: function(myObject: any, error:any) {
+            console.log(error);
+          }
+        });
+      },
+      error: function(object:any, error:any) {
+        console.log(error);
+      }
+    });*/
+  }
+
+  adicionaLista(nomeLista: string):Promise<Lista> {
+    let ListaParse = Parse.Object.extend("Lista");
+    let listaParse = new ListaParse();
+
+    listaParse.set("criadoPor", "alexandreseabra@gmail.com");
+    listaParse.set("nomeLista", nomeLista);
+    listaParse.set("itens",[]);
+
+    return listaParse.save();
   }
 
   adicionaItemNaLista(novoItem:Item, lista: Lista): void{
